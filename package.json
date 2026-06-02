@@ -1,0 +1,12 @@
+{
+  "name": "create-wp-vite",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "create-wp-vite": "index.js"
+  },
+  "files": [
+    "index.js",
+    "template"
+  ]
+}
