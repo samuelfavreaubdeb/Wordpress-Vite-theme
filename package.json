@@ -8,5 +8,8 @@
   "files": [
     "index.js",
     "template"
-  ]
+  ],
+  "dependencies": {
+    "prompts": "^2.4.2"
+  }
 }
