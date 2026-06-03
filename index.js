@@ -15,6 +15,8 @@ const { projectName } = await prompts({
   initial: 'my-wp-theme',
 });
 
+const projectNameDev = '##DEV##_' + projectName;
+
 const { author } = await prompts({
   type: 'text',
   name: 'author',
@@ -32,7 +34,7 @@ const { templates } = await prompts({
     { title: 'front-page', value: 'front-page', selected: true },
     { title: 'single', value: 'single', selected: true },
     { title: 'page', value: 'page', selected: true },
-    { title: '404', value: '404' },
+    { title: '404', value: '404', selected: true },
   ],
 });
 
@@ -42,20 +44,20 @@ if (!projectName || !templates) {
   process.exit(1);
 }
 
-if (fs.existsSync(projectName)) {
-  console.error(`\n❌ Directory "${projectName}" already exists.`);
+if (fs.existsSync(projectNameDev)) {
+  console.error(`\n❌ Directory "${projectNameDev}" already exists.`);
   process.exit(1);
 }
 
-console.log(`\n🚀 Creating "${projectName}"...\n`);
+console.log(`\n🚀 Creating new dev directory for "${projectName}"...\n`);
 
 // Copy template files to the target directory
-fs.cpSync(path.join(templateDir, 'base'), projectName, { recursive: true });
+fs.cpSync(path.join(templateDir, 'base'), projectNameDev, { recursive: true });
 
 // Copy each selected template file
 for (const t of templates) {
   const src = path.join(templateDir, 'pages', `${t}.php`);
-  const dest = path.join(projectName, `${t}.php`);
+  const dest = path.join(projectNameDev, `${t}.php`);
   if (fs.existsSync(src)) {
     fs.copyFileSync(src, dest);
     console.log(`  ✔ ${t}.php`);
@@ -63,9 +65,9 @@ for (const t of templates) {
 }
 
 // Optionally rename _gitignore → .gitignore (npm strips .gitignore on publish)
-const gitignoreSrc = path.join(projectName, '_gitignore');
+const gitignoreSrc = path.join(projectNameDev, '_gitignore');
 if (fs.existsSync(gitignoreSrc)) {
-  fs.renameSync(gitignoreSrc, path.join(projectName, '.gitignore'));
+  fs.renameSync(gitignoreSrc, path.join(projectNameDev, '.gitignore'));
 }
 
 // Create style.css with theme header
@@ -76,9 +78,15 @@ const themeHeader = `/**
  * Version:           1.0.0
  */`;
 
-fs.writeFileSync(path.join(projectName, 'style.css'), themeHeader);
+fs.writeFileSync(path.join(projectNameDev, 'style.css'), themeHeader);
+
+// Setting the name of the dist folder in vite.config.js
+const viteConfigPath = path.join(projectNameDev, 'vite.config.js');
+let viteConfigSrc = fs.readFileSync(viteConfigPath, 'utf-8');
+viteConfigSrc = viteConfigSrc.replace('Dist Vite Theme', projectName);
+fs.writeFileSync(viteConfigPath, viteConfigSrc);
 
 console.log(`✅ Done! Now run:\n`);
-console.log(`  cd ${projectName}`);
+console.log(`  cd "${projectNameDev}"`);
 console.log(`  npm install`);
 console.log(`  npm run dev\n`);

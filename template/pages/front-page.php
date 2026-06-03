@@ -1,12 +1,12 @@
 <?php get_header(); ?>
 
-<main id="main" class="site-main front-page">
+<main class="front-page">
     <section class="hero">
-        <h1 class="hero-title"><?php bloginfo('name'); ?></h1>
-        <p class="hero-description"><?php bloginfo('description'); ?></p>
+        <h1><?php bloginfo('name'); ?></h1>
+        <p><?php bloginfo('description'); ?></p>
     </section>
 
-    <section class="content">
+    <section>
         <div class="container">
             <?php
             if ( have_posts() ) :

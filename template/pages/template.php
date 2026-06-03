@@ -2,22 +2,24 @@
 
 <?php get_header(); ?>
 
-<main id="main" class="site-main front-page">
+<main class="template">
     <section class="hero">
-        <h1 class="hero-title"><?php bloginfo('name'); ?></h1>
-        <p class="hero-description"><?php bloginfo('description'); ?></p>
+        <h1><?php bloginfo('name'); ?></h1>
+        <p><?php bloginfo('description'); ?></p>
     </section>
 
-    <section class="content">
+    <section>
         <div class="container">
             <?php
             if ( have_posts() ) :
                 while ( have_posts() ) : the_post();?>
-                <div class="post">
-                    <h2><?php the_title();?></h2>
-                    <?php the_post_thumbnail();?>
-                    <?php the_content();?>
-                </div>
+                <a href="<?php the_permalink();?>">
+                    <div>
+                        <h2><?php the_title();?></h2>
+                        <?php the_post_thumbnail();?>
+                        <?php the_content();?>
+                    </div>
+                </a>
                 <?php endwhile;?>
             <?php endif; ?>
         </div>
