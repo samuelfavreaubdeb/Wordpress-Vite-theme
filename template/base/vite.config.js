@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import fullReload from 'vite-plugin-full-reload';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import postBuildPlugin from './dev config/post-build';
+import hostInfo from './dev config/host_info.json';
 
 export default defineConfig({
   build: {
@@ -35,9 +36,6 @@ export default defineConfig({
       origin: '*',
       credentials: true,
     },
-    hmr: {
-      host: 'localhost',
-      port: 5173,
-    },
+    hmr: hostInfo,
   },
 });

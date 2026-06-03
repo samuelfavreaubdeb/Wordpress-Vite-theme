@@ -15,7 +15,7 @@ const { projectName } = await prompts({
   initial: 'my-wp-theme',
 });
 
-const projectNameDev = '##DEV##_' + projectName;
+const projectNameDev = 'DEV_' + projectName;
 
 const { author } = await prompts({
   type: 'text',

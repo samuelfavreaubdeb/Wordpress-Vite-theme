@@ -26,16 +26,18 @@ function theme_enqueue_assets() {
 
         // Inject Vite HMR client and module entry points manually
         add_action('wp_head', function () {
+            $host_info = json_decode(file_get_contents(__DIR__ . '/dev config/host_info.json'), true);
+            $host_url = $host_info['host'] . ':' . $host_info['port'];
             $dev_file = get_template_directory() . "/src/" . get_current_template_name() . ".js";
-            $local_file = 'http://localhost:5173/src/'. get_current_template_name() . '.js';
+            $local_file = 'http://' . $host_url . '/src/' . get_current_template_name() . '.js';
 
-            echo '<script type="module" src="http://localhost:5173/@vite/client"></script>';
+            echo '<script type="module" src="http://' . $host_url . '/@vite/client"></script>';
 
             // Checks if a js file with the same name as the template exists.
             if (file_exists($dev_file)) {
                 echo '<script type="module" src='. $local_file .'></script>';
             } else {
-                echo '<script type="module" src="http://localhost:5173/src/main.js"></script>'; 
+                echo '<script type="module" src="http://' . $host_url . '/src/main.js"></script>'; 
             }
         });
     } else {
@@ -88,7 +90,7 @@ add_action('wp_enqueue_scripts', 'theme_enqueue_assets');
 // Register theme support for menus
 function register_menus() {
     register_nav_menus( array(
-        'primary' => __( 'main navigation', 'My custom Vite theme' ),
+        'primary-menu' => __( 'Primary Menu', 'text-domain' ),
     ));
 }
 add_action( 'after_setup_theme', 'register_menus' );
